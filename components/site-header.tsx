@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { navItems, siteConfig } from "@/lib/site";
@@ -7,9 +8,14 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[rgba(247,243,234,0.92)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex min-w-0 items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--accent)] bg-[var(--brand)] text-sm font-bold tracking-[0.24em] text-white">
-            EDH
-          </div>
+          <Image
+            src="/logo.png"
+            alt={siteConfig.name}
+            width={192}
+            height={48}
+            className="h-10 w-auto object-contain"
+            priority
+          />
           <div className="min-w-0">
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--muted)]">Family Owned Since 2012</p>
             <p className="truncate text-lg font-semibold text-[var(--brand-strong)]">{siteConfig.name}</p>
