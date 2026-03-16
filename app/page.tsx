@@ -353,7 +353,7 @@ export default function HomePage() {
                 data-track-event="schedule_service_click"
                 data-track-label="Homepage Booking Section CTA"
                 data-page-type="home"
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--brand)] px-6 py-3 text-base font-semibold text-white transition hover:bg-[var(--brand-strong)]"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--brand)] px-6 py-3 text-base font-semibold !text-white transition hover:bg-[var(--brand-strong)]"
               >
                 Open Booking Form
               </Link>
