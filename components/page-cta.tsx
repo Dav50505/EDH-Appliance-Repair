@@ -6,6 +6,9 @@ type PageCtaProps = {
   description: string;
   primaryHref: string;
   primaryLabel: string;
+  primaryTrackEvent?: string;
+  pageType?: string;
+  contentSlug?: string;
   secondaryHref?: string;
   secondaryLabel?: string;
 };
@@ -16,6 +19,9 @@ export function PageCta({
   description,
   primaryHref,
   primaryLabel,
+  primaryTrackEvent = "schedule_service_click",
+  pageType,
+  contentSlug,
   secondaryHref,
   secondaryLabel,
 }: PageCtaProps) {
@@ -30,8 +36,10 @@ export function PageCta({
         <div className="flex flex-col gap-3 sm:flex-row">
           <Link
             href={primaryHref}
-            data-track-event="schedule_service_click"
+            data-track-event={primaryTrackEvent}
             data-track-label={primaryLabel}
+            data-page-type={pageType}
+            data-content-slug={contentSlug}
             className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--brand)] px-6 py-3 text-base font-semibold !text-white transition hover:bg-[var(--brand-strong)]"
           >
             {primaryLabel}

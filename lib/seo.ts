@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import type { CityLandingPage, FaqItem, ResourceArticle, ServiceLandingPage } from "@/lib/content/types";
 import { reviewHighlights, serviceAreas, siteConfig, socialLinks } from "@/lib/site";
 
 type PageMetadataOptions = {
@@ -103,4 +104,128 @@ export function createReviewSchema() {
       },
     })),
   };
+}
+
+export function createBreadcrumbSchema(items: Array<{ name: string; path: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: new URL(item.path, siteConfig.url).toString(),
+    })),
+  };
+}
+
+export function createFaqSchema(items: FaqItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+export function createServiceSchema(service: ServiceLandingPage) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `${service.title} in El Dorado Hills`,
+    description: service.metaDescription,
+    areaServed: service.relatedCitySlugs.map((slug) => ({
+      "@type": "City",
+      name: slug
+        .split("-")
+        .map((part) => `${part[0].toUpperCase()}${part.slice(1)}`)
+        .join(" "),
+    })),
+    provider: {
+      "@type": "HomeAndConstructionBusiness",
+      name: siteConfig.name,
+      telephone: "+19168365544",
+      url: siteConfig.url,
+    },
+    serviceType: service.title,
+    url: new URL(`/services/${service.slug}`, siteConfig.url).toString(),
+  };
+}
+
+export function createCityLocalBusinessSchema(city: CityLandingPage) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HomeAndConstructionBusiness",
+    name: siteConfig.name,
+    url: new URL(`/service-areas/${city.slug}`, siteConfig.url).toString(),
+    telephone: "+19168365544",
+    email: siteConfig.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "3941 Park Dr Ste 20-539",
+      addressLocality: "El Dorado Hills",
+      addressRegion: "CA",
+      postalCode: "95762",
+      addressCountry: "US",
+    },
+    areaServed: {
+      "@type": "City",
+      name: city.city,
+    },
+    description: city.metaDescription,
+  };
+}
+
+export function createArticleSchema(article: ResourceArticle) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.metaDescription,
+    datePublished: article.publishedAt,
+    dateModified: article.updatedAt,
+    author: {
+      "@type": "Organization",
+      name: siteConfig.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+    },
+    mainEntityOfPage: new URL(`/resources/${article.slug}`, siteConfig.url).toString(),
+    keywords: article.keywords.join(", "),
+  };
+}
+
+export function createCityPageMetadata(city: CityLandingPage): Metadata {
+  return createPageMetadata({
+    title: city.metaTitle,
+    description: city.metaDescription,
+    path: `/service-areas/${city.slug}`,
+    keywords: [city.metaTitle, `${city.city} appliance repair`, `${city.city} refrigerator repair`],
+  });
+}
+
+export function createServicePageMetadata(service: ServiceLandingPage): Metadata {
+  return createPageMetadata({
+    title: service.metaTitle,
+    description: service.metaDescription,
+    path: `/services/${service.slug}`,
+    keywords: [service.metaTitle, `${service.title} El Dorado Hills`, "local appliance repair"],
+  });
+}
+
+export function createArticleMetadata(article: ResourceArticle): Metadata {
+  return createPageMetadata({
+    title: article.metaTitle,
+    description: article.metaDescription,
+    path: `/resources/${article.slug}`,
+    keywords: article.keywords,
+  });
 }

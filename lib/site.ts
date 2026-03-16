@@ -13,6 +13,31 @@ export const siteConfig = {
   googleMapsUrl: "https://www.google.com/maps?q=3941+Park+Dr+Ste+20-539+El+Dorado+Hills+CA+95762",
 } as const;
 
+export const editorialImages = {
+  homeHero: {
+    src: "/home.png",
+    alt: "EDH Appliance Repair owner holding Best of the Best awards.",
+    width: 1940,
+    height: 2178,
+    sizes: "(min-width: 1280px) 36rem, (min-width: 1024px) 42vw, 100vw",
+    priority: true,
+  },
+  aboutFamily: {
+    src: "/family.webp",
+    alt: "EDH Appliance Repair family team posing together for the About page photo.",
+    width: 729,
+    height: 730,
+    sizes: "(min-width: 1024px) 28rem, 100vw",
+  },
+  contactDiagnostic: {
+    src: "/technician-diagnosis.svg",
+    alt: "Illustrated appliance technician diagnosing a kitchen appliance for an El Dorado Hills homeowner.",
+    width: 1400,
+    height: 960,
+    sizes: "(min-width: 1024px) 32rem, 100vw",
+  },
+} as const;
+
 export const navItems = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
@@ -38,10 +63,26 @@ export const serviceAreas = [
 ] as const;
 
 export const trustBadges = [
-  "Telegraph Best of EDH/Folsom 2023",
-  "Telegraph Best of EDH/Folsom 2024",
-  "Nextdoor Neighborhood Fave 2022",
-  "Nextdoor Neighborhood Fave 2023",
+  {
+    label: "Best of EDH/Folsom",
+    source: "Telegraph",
+    year: "2023",
+  },
+  {
+    label: "Best of EDH/Folsom",
+    source: "Telegraph",
+    year: "2024",
+  },
+  {
+    label: "Neighborhood Fave",
+    source: "Nextdoor",
+    year: "2022",
+  },
+  {
+    label: "Neighborhood Fave",
+    source: "Nextdoor",
+    year: "2023",
+  },
 ] as const;
 
 export const whyChooseUs = [
@@ -116,6 +157,7 @@ export const aboutHighlights = [
   "After moving to El Dorado Hills in 2012, the family built the business around dependable local service and honest recommendations.",
   "EDH Appliance Repair is still run by a husband-and-wife team that treats every visit like a neighbor referral is on the line.",
   "Their golden-hills branding reflects the community they chose to put down roots in and continue serving every week.",
+  "Customers can expect on-time arrivals, clear communication about the repair, and a clean workspace before the job is wrapped up.",
 ] as const;
 
 export const serviceBrands = [
@@ -134,6 +176,30 @@ export const serviceBrands = [
   "Roper",
   "Samsung",
   "Whirlpool",
+] as const;
+
+const serviceBrandsSummary = serviceBrands.join(", ");
+
+export const bookingFaqs = [
+  {
+    question: "What does the $100 service fee cover?",
+    answer:
+      "The $100 service fee covers the trip to your home, a full diagnosis of the appliance issue, and a clear repair estimate. If we complete the repair, that fee is applied toward the repair cost.",
+  },
+  {
+    question: "Do you charge extra for evenings or weekends?",
+    answer:
+      "No. Evening and weekend appointments are available by request when the schedule allows, and there is no extra charge for those appointment windows.",
+  },
+  {
+    question: "What brands do you service?",
+    answer: `We regularly service major household appliance brands including ${serviceBrandsSummary}. If your brand is not listed, call or text and we can confirm before booking.`,
+  },
+  {
+    question: "How quickly can you come out?",
+    answer:
+      "Same-day or next-day appointments are often available when openings allow. Call, text, or submit the form and we will follow up with the fastest appointment options currently open.",
+  },
 ] as const;
 
 export const serviceValuePoints = [

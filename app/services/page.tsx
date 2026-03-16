@@ -5,9 +5,9 @@ import { createPageMetadata } from "@/lib/seo";
 import { serviceBrands, serviceValuePoints } from "@/lib/site";
 
 export const metadata = createPageMetadata({
-  title: "Appliance Repair Services in El Dorado Hills | EDH Appliance Repair",
+  title: "Appliance Repair Services | EDH Appliance Repair",
   description:
-    "See appliance repair services in El Dorado Hills, CA, including pricing, brands serviced, and washer, dryer, refrigerator, and oven repair.",
+    "Major appliance repair in El Dorado Hills — refrigerators, washers, dryers, ovens, dishwashers and more. $100 service fee applied to repair cost.",
   path: "/services",
 });
 
@@ -50,8 +50,8 @@ export default function ServicesPage() {
       <section className="section-card rounded-[2rem] p-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Appliances Repaired</p>
-            <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">Major household appliances we service every week</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Browse Repair Pages</p>
+            <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">Major household appliance issues we service every week</h2>
           </div>
         </div>
 

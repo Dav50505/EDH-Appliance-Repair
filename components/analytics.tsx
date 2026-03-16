@@ -1,34 +1,61 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Script from "next/script";
 
-import { analyticsConfig } from "@/lib/analytics";
+import { analyticsConfig, trackAnalyticsEvent } from "@/lib/analytics";
 
-declare global {
-  interface Window {
-    dataLayer?: Array<Record<string, unknown>>;
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
-function trackEvent(name: string, label?: string) {
-  if (typeof window === "undefined") {
-    return;
+function getPageAnalyticsContext(pathname: string) {
+  if (pathname === "/") {
+    return { pageType: "home" };
   }
 
-  const payload = {
-    event: name,
-    event_category: "engagement",
-    event_label: label,
-  };
+  if (pathname === "/contact") {
+    return { pageType: "contact" };
+  }
 
-  window.dataLayer = window.dataLayer ?? [];
-  window.dataLayer.push(payload);
-  window.gtag?.("event", name, payload);
+  if (pathname === "/services") {
+    return { pageType: "services-index" };
+  }
+
+  if (pathname.startsWith("/services/")) {
+    return { pageType: "service-detail", contentSlug: pathname.split("/")[2] };
+  }
+
+  if (pathname === "/service-areas") {
+    return { pageType: "areas-index" };
+  }
+
+  if (pathname.startsWith("/service-areas/")) {
+    return { pageType: "city-detail", contentSlug: pathname.split("/")[2] };
+  }
+
+  if (pathname === "/resources") {
+    return { pageType: "resources-index" };
+  }
+
+  if (pathname.startsWith("/resources/")) {
+    return { pageType: "article", contentSlug: pathname.split("/")[2] };
+  }
+
+  return { pageType: pathname.replace(/^\//, "") || "unknown" };
 }
 
 export function Analytics() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const { pageType, contentSlug } = getPageAnalyticsContext(pathname);
+
+    trackAnalyticsEvent("page_view", {
+      event_category: "engagement",
+      event_label: pageType,
+      page_type: pageType,
+      content_slug: contentSlug,
+    });
+  }, [pathname]);
+
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
       const target = event.target;
@@ -43,7 +70,12 @@ export function Analytics() {
         return;
       }
 
-      trackEvent(trackedElement.dataset.trackEvent ?? "interaction", trackedElement.dataset.trackLabel);
+      trackAnalyticsEvent(trackedElement.dataset.trackEvent ?? "interaction", {
+        event_category: "engagement",
+        event_label: trackedElement.dataset.trackLabel,
+        page_type: trackedElement.dataset.pageType,
+        content_slug: trackedElement.dataset.contentSlug,
+      });
     };
 
     const handleSubmit = (event: SubmitEvent) => {
@@ -59,7 +91,12 @@ export function Analytics() {
         return;
       }
 
-      trackEvent(eventName, target.dataset.trackLabel);
+      trackAnalyticsEvent(eventName, {
+        event_category: "engagement",
+        event_label: target.dataset.trackLabel,
+        page_type: target.dataset.pageType,
+        content_slug: target.dataset.contentSlug,
+      });
     };
 
     document.addEventListener("click", handleClick);

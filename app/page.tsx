@@ -1,9 +1,15 @@
 import Link from "next/link";
 
+import { ApplianceIcon } from "@/components/appliance-icon";
+import { ContentImage } from "@/components/content-image";
+import { HomeFaq } from "@/components/home-faq";
+import { resourceArticles } from "@/lib/content/resources";
+import { getPrimaryServiceSlug } from "@/lib/content/services";
 import { createPageMetadata, createReviewSchema } from "@/lib/seo";
 import {
   aboutHighlights,
   applianceServices,
+  editorialImages,
   reviewHighlights,
   serviceAreas,
   siteConfig,
@@ -15,25 +21,36 @@ const serviceExclusions =
   "We do not service small home appliances such as garbage disposals, countertop microwaves, toasters, vacuums, or mixers.";
 
 const quickFacts = [
-  "Same-day or next-day availability when openings allow",
-  "$100 service fee applied to repair cost when we complete the fix",
-  "Evening and weekend appointments available by request",
+  {
+    label: "Hours",
+    value: siteConfig.hours,
+    icon: "◔",
+  },
+  {
+    label: "Service Fee",
+    value: "$100 service fee applied to the repair cost when we complete the fix.",
+    icon: "$",
+  },
+  {
+    label: "Coverage",
+    value: "El Dorado Hills, Folsom, Cameron Park, Rescue, Latrobe, Shingle Springs, Diamond Springs, and El Dorado.",
+    icon: "⌂",
+  },
 ] as const;
 
-const bookingFields = [
-  { label: "Name", name: "name", type: "text", placeholder: "Your full name" },
-  { label: "Phone", name: "phone", type: "tel", placeholder: "(916) 555-1234" },
-  { label: "Email", name: "email", type: "email", placeholder: "you@example.com" },
-  { label: "Street Address", name: "streetAddress", type: "text", placeholder: "123 Main St" },
-  { label: "City", name: "city", type: "text", placeholder: "El Dorado Hills" },
-  { label: "Zip", name: "zip", type: "text", placeholder: "95762" },
-  { label: "Brand & Model", name: "brandModel", type: "text", placeholder: "Whirlpool WRF555..." },
-] as const;
+function getReviewerInitials(name: string) {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
 
 export const metadata = createPageMetadata({
   title: "EDH Appliance Repair | Appliance Repair in El Dorado Hills, CA",
   description:
-    "Fast, reliable appliance repair in El Dorado Hills, CA for refrigerators, washers, dryers, ovens, and dishwashers. Call EDH Appliance Repair today.",
+    "Local appliance repair in El Dorado Hills. Fast, reliable service for refrigerators, washers, dryers, ovens and more. Call (916) 836-5544.",
   path: "/",
 });
 
@@ -47,8 +64,8 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
       />
       <section className="section-card home-hero overflow-hidden rounded-[2rem] px-6 py-8 sm:px-10 sm:py-10 lg:px-12">
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-          <div>
+        <div className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
+          <div className="max-w-5xl">
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[var(--brand)]">
               Family-run appliance service
             </p>
@@ -57,8 +74,8 @@ export default function HomePage() {
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">
               Refrigerator, washer, dryer, oven, dishwasher, microwave, and cooktop repair with same-day or
-              next-day availability when possible. Call or text for a clear diagnosis, honest pricing, and
-              local service from an appliance repair El Dorado Hills homeowners trust.
+              next-day availability when possible. Call or text for a clear diagnosis, honest pricing, and local
+              service from an appliance repair El Dorado Hills homeowners trust.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -66,7 +83,7 @@ export default function HomePage() {
                 href="/#schedule-service"
                 data-track-event="schedule_service_click"
                 data-track-label="Hero Schedule CTA"
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--brand)] px-6 py-3 text-base font-semibold !text-white transition hover:bg-[var(--brand-strong)]"
+                className="inline-flex min-h-14 items-center justify-center rounded-full bg-[var(--brand-strong)] px-8 py-4 text-base font-bold tracking-[0.01em] !text-white shadow-[0_18px_34px_rgba(14,34,67,0.26)] transition duration-200 hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-[var(--brand)] hover:shadow-[0_24px_44px_rgba(14,34,67,0.32)]"
               >
                 Schedule Service
               </Link>
@@ -79,110 +96,137 @@ export default function HomePage() {
                 Call or Text {siteConfig.phoneDisplay}
               </a>
             </div>
-
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              {quickFacts.map((fact) => (
-                <div key={fact} className="rounded-[1.5rem] border border-[var(--border)] bg-white/72 px-4 py-4">
-                  <p className="text-sm leading-6 text-[var(--foreground)]">{fact}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              {trustBadges.map((badge) => (
-                <span
-                  key={badge}
-                  className="inline-flex min-h-11 items-center rounded-full border border-[var(--accent)] bg-[var(--accent-soft)] px-4 py-2 text-sm font-semibold text-[var(--brand-strong)]"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
           </div>
 
-          <aside className="rounded-[2rem] border border-[var(--border)] bg-[linear-gradient(180deg,rgba(14,34,67,0.98),rgba(23,50,93,0.92))] p-7 text-white shadow-[0_24px_80px_rgba(14,34,67,0.24)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--accent-soft)]">
-              Why neighbors call first
-            </p>
-            <div className="mt-5 space-y-4">
-              <div>
-                <p className="text-sm text-white/68">Hours</p>
-                <p className="mt-1 text-base leading-7 text-white/86">{siteConfig.hours}</p>
-              </div>
-              <div>
-                <p className="text-sm text-white/68">Service Fee</p>
-                <p className="mt-1 text-base leading-7 text-white/86">
-                  $100 service fee, applied to the repair cost if we fix the appliance.
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-white/68">Coverage</p>
-                <p className="mt-1 text-base leading-7 text-white/86">
-                  El Dorado Hills, Folsom, Cameron Park, Rescue, Latrobe, Shingle Springs, Diamond Springs, and
-                  El Dorado, with a local appliance technician ready to help.
-                </p>
-              </div>
-            </div>
-          </aside>
+          <ContentImage
+            src={editorialImages.homeHero.src}
+            alt={editorialImages.homeHero.alt}
+            width={editorialImages.homeHero.width}
+            height={editorialImages.homeHero.height}
+            sizes={editorialImages.homeHero.sizes}
+            priority={editorialImages.homeHero.priority}
+            className="aspect-[3/2]"
+            imageClassName="object-center object-[center_22%]"
+          />
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <article className="section-card rounded-[2rem] p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Why Choose Us</p>
-          <div className="mt-6 grid gap-4">
-            {whyChooseUs.map((item, index) => (
-              <div key={item} className="rounded-[1.75rem] border border-[var(--border)] bg-white/72 px-5 py-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">
-                  0{index + 1}
-                </p>
-                <p className="mt-2 text-base leading-7 text-[var(--foreground)]">{item}</p>
-              </div>
-            ))}
+      <section className="page-section section-card rounded-[2rem] p-8">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Social Proof</p>
+            <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">
+              Trusted by local homeowners who want the repair handled right the first time
+            </h2>
+            <p className="mt-4 text-base leading-8 text-[var(--muted)]">
+              Local awards, repeat customers, and five-star feedback all point to the same thing: dependable
+              service and a straightforward experience from first call to finished repair.
+            </p>
           </div>
-        </article>
+          <a
+            href={siteConfig.googleReviewUrl}
+            target="_blank"
+            rel="noreferrer"
+            data-track-event="view_reviews_click"
+            data-track-label="Homepage Reviews Link"
+            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--brand-strong)] bg-[var(--brand-strong)] px-6 py-3 text-sm font-semibold !text-white shadow-[0_16px_36px_rgba(14,34,67,0.18)] transition hover:-translate-y-0.5 hover:bg-[var(--brand)]"
+          >
+            Read More Reviews
+          </a>
+        </div>
 
-        <article className="section-card rounded-[2rem] p-8">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Social Proof</p>
-              <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">
-                Trusted by local homeowners who need the repair handled right
-              </h2>
-            </div>
-            <a
-              href={siteConfig.googleReviewUrl}
-              target="_blank"
-              rel="noreferrer"
-              data-track-event="view_reviews_click"
-              data-track-label="Homepage Reviews Link"
-              className="text-sm font-semibold text-[var(--brand)] transition hover:text-[var(--brand-strong)]"
+        <div className="mt-8 flex flex-wrap gap-3">
+          {trustBadges.map((badge) => (
+            <div
+              key={`${badge.source}-${badge.label}-${badge.year}`}
+              className="flex min-h-16 items-center gap-3 rounded-[1.4rem] border border-[rgba(209,166,70,0.42)] bg-[linear-gradient(180deg,rgba(240,224,182,0.72),rgba(255,253,248,0.94))] px-4 py-3 shadow-[0_12px_32px_rgba(209,166,70,0.16)]"
             >
-              Read more reviews
-            </a>
-          </div>
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)] text-lg text-[var(--brand-strong)]">
+                ★
+              </span>
+              <div className="leading-tight">
+                <p className="text-sm font-semibold text-[var(--brand-strong)]">{badge.label}</p>
+                <p className="mt-1 text-xs uppercase tracking-[0.22em] text-[var(--muted)]">
+                  {badge.source} {badge.year}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
 
-          <div className="mt-6 grid gap-4">
-            {reviewHighlights.map((review) => (
-              <blockquote key={review.name} className="rounded-[1.75rem] border border-[var(--border)] bg-white/72 p-5">
-                <p className="text-sm tracking-[0.18em] text-[var(--accent)]">★★★★★</p>
-                <p className="mt-3 text-base leading-7 text-[var(--foreground)]">“{review.quote}”</p>
-                <footer className="mt-4 text-sm font-semibold text-[var(--brand-strong)]">
-                  {review.name}
-                  <span className="font-normal text-[var(--muted)]"> · {review.source}</span>
-                </footer>
-              </blockquote>
-            ))}
-          </div>
-        </article>
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+          {reviewHighlights.map((review) => (
+            <blockquote
+              key={review.name}
+              className="rounded-[1.85rem] border border-[var(--border)] bg-white/82 p-6 shadow-[0_16px_40px_rgba(23,50,93,0.1)]"
+            >
+              <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--brand-strong)] text-sm font-semibold tracking-[0.16em] text-white">
+                  {getReviewerInitials(review.name)}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[var(--brand-strong)]">{review.name}</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">{review.source}</p>
+                </div>
+              </div>
+              <p className="mt-5 text-sm tracking-[0.22em] text-[var(--accent-strong)]">★★★★★</p>
+              <p className="mt-3 text-base leading-7 text-[var(--foreground)]">“{review.quote}”</p>
+            </blockquote>
+          ))}
+        </div>
       </section>
 
-      <section className="section-card rounded-[2rem] p-8">
+      <section className="page-section section-card rounded-[2rem] p-8">
+        <div className="flex flex-col gap-3">
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Why Choose Us</p>
+          <h2 className="text-3xl font-semibold text-[var(--brand-strong)]">
+            The local repair team neighbors call when the breakdown cannot wait
+          </h2>
+        </div>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          {whyChooseUs.map((item, index) => (
+            <div
+              key={item}
+              className="rounded-[1.85rem] border border-[var(--border)] bg-white/78 px-5 py-5 shadow-[0_12px_30px_rgba(23,50,93,0.08)]"
+            >
+              <div className="flex items-center gap-4">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--brand-strong)] text-sm font-semibold tracking-[0.18em] text-white">
+                  0{index + 1}
+                </span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--brand-strong)]">
+                  ✦
+                </span>
+              </div>
+              <p className="mt-4 text-base leading-7 text-[var(--foreground)]">{item}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="grid gap-4 md:grid-cols-3">
+          {quickFacts.map((fact) => (
+            <article
+              key={fact.label}
+              className="section-card rounded-[1.85rem] px-5 py-6 shadow-[0_16px_40px_rgba(23,50,93,0.08)]"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--brand)] text-lg text-white shadow-[0_12px_24px_rgba(23,50,93,0.18)]">
+                {fact.icon}
+              </div>
+              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">{fact.label}</p>
+              <p className="mt-3 text-base leading-7 text-[var(--foreground)]">{fact.value}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="page-section section-card rounded-[2rem] p-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Repair Services</p>
             <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">
-              Major appliance repair for the problems that stop the house
+              Major appliance repair for the breakdowns that bring your home to a stop.
             </h2>
           </div>
           <Link href="/services" className="text-sm font-semibold text-[var(--brand)] transition hover:text-[var(--brand-strong)]">
@@ -193,20 +237,20 @@ export default function HomePage() {
         <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {applianceServices.map((service) => (
             <article key={service.name} className="rounded-[1.75rem] border border-[var(--border)] bg-white/78 p-5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--brand)] text-sm font-semibold uppercase tracking-[0.18em] text-white">
-                {service.name
-                  .split(" ")
-                  .map((word) => word[0])
-                  .join("")
-                  .slice(0, 2)}
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--brand)] text-white shadow-[0_12px_24px_rgba(23,50,93,0.18)]">
+                <ApplianceIcon appliance={service.name} />
               </div>
               <h3 className="mt-4 text-xl font-semibold text-[var(--brand-strong)]">{service.name} Repair</h3>
               <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{service.description}</p>
               <Link
-                href="/#schedule-service"
+                href={`/services/${getPrimaryServiceSlug(service.name)}`}
+                data-track-event="schedule_service_click"
+                data-track-label={`${service.name} Homepage Card`}
+                data-page-type="home"
+                data-content-slug={getPrimaryServiceSlug(service.name)}
                 className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--brand)] transition hover:text-[var(--brand-strong)]"
               >
-                Schedule This Repair
+                View Repair Page
               </Link>
             </article>
           ))}
@@ -217,7 +261,7 @@ export default function HomePage() {
         </p>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_0.95fr]">
+      <section className="page-section grid gap-6 lg:grid-cols-[1fr_0.95fr]">
         <article className="section-card rounded-[2rem] p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Service Area</p>
           <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">Local coverage centered on El Dorado Hills</h2>
@@ -266,17 +310,14 @@ export default function HomePage() {
         <article className="section-card rounded-[2rem] p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">About EDH Appliance Repair</p>
           <div className="mt-6 grid gap-6 md:grid-cols-[0.85fr_1.15fr]">
-            <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(23,50,93,0.95),rgba(14,34,67,0.86))] p-6 text-white">
-              <div className="flex h-full min-h-56 flex-col justify-between rounded-[1.5rem] border border-white/16 bg-white/8 p-5">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.28em] text-[var(--accent-soft)]">Family-run since</p>
-                  <p className="mt-3 text-5xl font-semibold">2012</p>
-                </div>
-                <p className="max-w-[14rem] text-sm leading-6 text-white/78">
-                  Neighbor-first service built on reputation, repeat customers, and referrals across the foothills.
-                </p>
-              </div>
-            </div>
+            <ContentImage
+              src={editorialImages.aboutFamily.src}
+              alt={editorialImages.aboutFamily.alt}
+              width={editorialImages.aboutFamily.width}
+              height={editorialImages.aboutFamily.height}
+              sizes="(min-width: 768px) 24rem, 100vw"
+              className="aspect-[6/7]"
+            />
 
             <div className="space-y-4">
               {aboutHighlights.map((paragraph) => (
@@ -295,134 +336,115 @@ export default function HomePage() {
         </article>
       </section>
 
-      <section id="schedule-service" className="grid scroll-mt-28 gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-        <article className="section-card rounded-[2rem] p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Book Service</p>
-              <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">Start your service request</h2>
+      <section id="schedule-service" className="page-section scroll-mt-28">
+        <HomeFaq className="section-card rounded-[2rem] p-8" />
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+          <article className="section-card rounded-[2rem] p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Book Service</p>
+            <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">Start your service request</h2>
+            <p className="mt-4 text-base leading-8 text-[var(--muted)]">
+              Use the full booking form on the contact page to share your appliance details, preferred appointment
+              time, and service address.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/contact"
+                data-track-event="schedule_service_click"
+                data-track-label="Homepage Booking Section CTA"
+                data-page-type="home"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--brand)] px-6 py-3 text-base font-semibold text-white transition hover:bg-[var(--brand-strong)]"
+              >
+                Open Booking Form
+              </Link>
+              <a
+                href={siteConfig.phoneHref}
+                data-track-event="click_to_call"
+                data-track-label="Homepage Booking Section Call CTA"
+                data-page-type="home"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border-strong)] bg-white px-6 py-3 text-base font-semibold text-[var(--brand-strong)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
+              >
+                Call or Text {siteConfig.phoneDisplay}
+              </a>
             </div>
-            <a href={siteConfig.phoneHref} className="text-sm font-semibold text-[var(--brand)] transition hover:text-[var(--brand-strong)]">
-              {siteConfig.phoneDisplay} — Call or Text
-            </a>
-          </div>
+          </article>
 
-          <form
-            action={`mailto:${siteConfig.email}`}
-            method="post"
-            encType="text/plain"
-            className="mt-8 grid gap-4 md:grid-cols-2"
-            data-track-event="generate_lead"
-            data-track-label="Homepage Booking Form Submission"
-          >
-            {bookingFields.map((field) => (
-              <label
-                key={field.name}
-                htmlFor={`homepage-booking-${field.name}`}
-                className="grid gap-2 text-sm font-medium text-[var(--brand-strong)]"
-              >
-                {field.label}
-                <input
-                  id={`homepage-booking-${field.name}`}
-                  name={field.name}
-                  type={field.type}
-                  placeholder={field.placeholder}
-                  autoComplete={field.name === "streetAddress" ? "street-address" : field.name}
-                  required={field.name === "name" || field.name === "phone" || field.name === "brandModel"}
-                  className="min-h-12 rounded-[1.1rem] border border-[var(--border)] bg-white px-4 py-3 text-base text-[var(--foreground)] outline-none transition focus:border-[var(--brand)] focus:ring-2 focus:ring-[rgba(23,50,93,0.14)]"
-                />
-              </label>
-            ))}
-
-            <label htmlFor="homepage-booking-preferredTime" className="grid gap-2 text-sm font-medium text-[var(--brand-strong)]">
-              Preferred Time
-              <select
-                id="homepage-booking-preferredTime"
-                name="preferredTime"
-                className="min-h-12 rounded-[1.1rem] border border-[var(--border)] bg-white px-4 py-3 text-base text-[var(--foreground)] outline-none transition focus:border-[var(--brand)] focus:ring-2 focus:ring-[rgba(23,50,93,0.14)]"
-                defaultValue="Soonest Available"
-              >
-                <option>Morning</option>
-                <option>Afternoon</option>
-                <option>Evening</option>
-                <option>Soonest Available</option>
-              </select>
-            </label>
-
-            <label htmlFor="homepage-booking-issueDescription" className="grid gap-2 text-sm font-medium text-[var(--brand-strong)] md:col-span-2">
-              Issue Description
-              <textarea
-                id="homepage-booking-issueDescription"
-                name="issueDescription"
-                rows={5}
-                placeholder="Tell us what the appliance is doing, any error codes, and when the problem started."
-                required
-                className="rounded-[1.1rem] border border-[var(--border)] bg-white px-4 py-3 text-base text-[var(--foreground)] outline-none transition focus:border-[var(--brand)] focus:ring-2 focus:ring-[rgba(23,50,93,0.14)]"
-              />
-            </label>
-
-            <div className="md:col-span-2 flex flex-col gap-3 rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface-strong)] p-5">
-              <p className="text-sm leading-7 text-[var(--foreground)]">
-                Most issues are diagnosed on the first visit, and the $100 service fee is applied to the repair if
-                we complete the work.
-              </p>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <button
-                  type="submit"
-                  data-track-event="schedule_service_click"
-                  data-track-label="Homepage Booking Submit Button"
-                  className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--brand)] px-6 py-3 text-base font-semibold !text-white transition hover:bg-[var(--brand-strong)]"
-                >
-                  Start Email Request
-                </button>
-                <a
-                  href={siteConfig.phoneHref}
-                  data-track-event="click_to_call"
-                  data-track-label="Homepage Booking Call CTA"
-                  className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--border-strong)] bg-white px-6 py-3 text-base font-semibold text-[var(--brand-strong)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
-                >
-                  Call or Text Instead
-                </a>
+          <aside className="section-card rounded-[2rem] p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">What to Expect</p>
+            <div className="mt-6 space-y-5">
+              <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/78 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">Hours</p>
+                <p className="mt-2 text-base leading-7 text-[var(--foreground)]">{siteConfig.hours}</p>
+              </div>
+              <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/78 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">First Visit Goal</p>
+                <p className="mt-2 text-base leading-7 text-[var(--foreground)]">Most issues diagnosed on the first visit.</p>
+              </div>
+              <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/78 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">Pricing Reassurance</p>
+                <p className="mt-2 text-base leading-7 text-[var(--foreground)]">
+                  $100 service fee applied to the cost of repair if we fix it.
+                </p>
+              </div>
+              <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/78 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">Address</p>
+                <p className="mt-2 text-base leading-7 text-[var(--foreground)]">{siteConfig.address}</p>
               </div>
             </div>
-          </form>
-        </article>
+          </aside>
+        </div>
+      </section>
 
-        <aside className="section-card rounded-[2rem] p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">What to Expect</p>
-          <div className="mt-6 space-y-5">
-            <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/78 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">Hours</p>
-              <p className="mt-2 text-base leading-7 text-[var(--foreground)]">{siteConfig.hours}</p>
-            </div>
-            <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/78 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">First Visit Goal</p>
-              <p className="mt-2 text-base leading-7 text-[var(--foreground)]">Most issues diagnosed on the first visit.</p>
-            </div>
-            <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/78 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">Pricing Reassurance</p>
-              <p className="mt-2 text-base leading-7 text-[var(--foreground)]">
-                $100 service fee applied to the cost of repair if we fix it.
-              </p>
-            </div>
-            <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/78 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">Address</p>
-              <p className="mt-2 text-base leading-7 text-[var(--foreground)]">{siteConfig.address}</p>
-            </div>
+      <section className="page-section section-card rounded-[2rem] p-8">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Resources</p>
+            <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">
+              Practical appliance repair guidance for the questions homeowners search most
+            </h2>
+            <p className="mt-4 text-base leading-8 text-[var(--muted)]">
+              Read a few quick explainers before you book, then move straight into the repair page or service request if the appliance needs a real diagnosis.
+            </p>
           </div>
-        </aside>
+          <Link href="/resources" className="text-sm font-semibold text-[var(--brand)] transition hover:text-[var(--brand-strong)]">
+            Browse all resources
+          </Link>
+        </div>
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          {resourceArticles.slice(0, 3).map((article) => (
+            <Link
+              key={article.slug}
+              href={`/resources/${article.slug}`}
+              className="rounded-[1.75rem] border border-[var(--border)] bg-white/80 p-5 transition hover:border-[var(--brand)]"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand)]">{article.readingTime}</p>
+              <h3 className="mt-4 text-xl font-semibold text-[var(--brand-strong)]">{article.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{article.excerpt}</p>
+            </Link>
+          ))}
+        </div>
       </section>
 
       <div className="mobile-call-bar fixed inset-x-3 bottom-3 z-50 md:hidden">
-        <div className="rounded-full border border-[var(--border-strong)] bg-[rgba(255,253,248,0.96)] p-2 shadow-[0_20px_50px_rgba(14,34,67,0.22)] backdrop-blur-xl">
-          <a
-            href={siteConfig.phoneHref}
-            data-track-event="click_to_call"
-            data-track-label="Mobile Sticky Call CTA"
-            className="flex min-h-12 items-center justify-center rounded-full bg-[var(--brand)] px-5 py-3 text-base font-semibold !text-white"
-          >
-            Call or Text {siteConfig.phoneDisplay}
-          </a>
+        <div className="rounded-[1.6rem] border border-[var(--border-strong)] bg-[rgba(255,253,248,0.96)] p-2 shadow-[0_20px_50px_rgba(14,34,67,0.22)] backdrop-blur-xl">
+          <div className="grid grid-cols-2 gap-2">
+            <a
+              href={siteConfig.phoneHref}
+              data-track-event="click_to_call"
+              data-track-label="Mobile Sticky Call CTA"
+              className="flex min-h-12 items-center justify-center rounded-full bg-[var(--brand)] px-4 py-3 text-center text-sm font-semibold !text-white"
+            >
+              Call or Text {siteConfig.phoneDisplay}
+            </a>
+            <a
+              href="#schedule-service"
+              data-track-event="schedule_service_click"
+              data-track-label="Mobile Sticky Schedule CTA"
+              className="flex min-h-12 items-center justify-center rounded-full border border-[var(--border-strong)] bg-white px-4 py-3 text-center text-sm font-semibold text-[var(--brand-strong)]"
+            >
+              Schedule
+            </a>
+          </div>
         </div>
       </div>
     </>

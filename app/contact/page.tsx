@@ -1,14 +1,18 @@
-import { BookingForm } from "@/components/booking-form";
+import Link from "next/link";
+
+import { ContactBookingForm } from "@/components/contact-booking-form";
+import { ContentImage } from "@/components/content-image";
 import { ContactSidebar } from "@/components/contact-sidebar";
 import { MapEmbed } from "@/components/map-embed";
 import { SectionHero } from "@/components/section-hero";
+import { resourceArticles } from "@/lib/content/resources";
 import { createPageMetadata } from "@/lib/seo";
-import { siteConfig } from "@/lib/site";
+import { editorialImages, siteConfig } from "@/lib/site";
 
 export const metadata = createPageMetadata({
-  title: "Schedule Appliance Repair in El Dorado Hills | EDH Appliance Repair",
+  title: "Schedule Service | EDH Appliance Repair",
   description:
-    "Schedule appliance repair in El Dorado Hills, CA with EDH Appliance Repair. Call, text, or send a booking request for fast local service.",
+    "Schedule an appliance repair in El Dorado Hills. Call, text, or submit a request online. (916) 836-5544.",
   path: "/contact",
 });
 
@@ -22,8 +26,32 @@ export default function ContactPage() {
       />
 
       <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-        <BookingForm title="Tell us about the appliance issue" description="Most issues are diagnosed on the first visit. Include the appliance brand, model, symptoms, and preferred appointment time so the scheduling follow-up can move faster." />
+        <ContactBookingForm
+          title="Tell us about the appliance issue"
+          description="Most issues are diagnosed on the first visit. Include the appliance brand, model, symptoms, and preferred appointment time so the scheduling follow-up can move faster."
+          sourcePath="/contact"
+        />
         <ContactSidebar showSocialLinks showMapLink />
+      </section>
+
+      <section className="section-card rounded-[2rem] p-8">
+        <div className="grid gap-6 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">What To Expect</p>
+            <h2 className="mt-2 text-3xl font-semibold text-[var(--brand-strong)]">A clear diagnosis before any repair work begins</h2>
+            <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--muted)]">
+              Each visit is built around a full appliance inspection, practical recommendations, and a straightforward estimate so you know what needs attention before approving the repair.
+            </p>
+          </div>
+          <ContentImage
+            src={editorialImages.contactDiagnostic.src}
+            alt={editorialImages.contactDiagnostic.alt}
+            width={editorialImages.contactDiagnostic.width}
+            height={editorialImages.contactDiagnostic.height}
+            sizes={editorialImages.contactDiagnostic.sizes}
+            className="aspect-[7/5]"
+          />
+        </div>
       </section>
 
       <section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
@@ -85,6 +113,22 @@ export default function ContactPage() {
         >
           Read or Leave a Google Review
         </a>
+      </section>
+
+      <section className="section-card rounded-[2rem] p-8">
+        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand)]">Helpful Before You Book</p>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {resourceArticles.slice(0, 2).map((article) => (
+            <Link
+              key={article.slug}
+              href={`/resources/${article.slug}`}
+              className="rounded-[1.75rem] border border-[var(--border)] bg-white/80 p-5 transition hover:border-[var(--brand)]"
+            >
+              <h2 className="text-xl font-semibold text-[var(--brand-strong)]">{article.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{article.excerpt}</p>
+            </Link>
+          ))}
+        </div>
       </section>
     </>
   );
