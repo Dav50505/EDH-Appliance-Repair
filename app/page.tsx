@@ -316,7 +316,7 @@ export default function HomePage() {
               width={editorialImages.aboutFamily.width}
               height={editorialImages.aboutFamily.height}
               sizes="(min-width: 768px) 24rem, 100vw"
-              className="aspect-[6/7]"
+              className="aspect-[729/730]"
             />
 
             <div className="space-y-4">

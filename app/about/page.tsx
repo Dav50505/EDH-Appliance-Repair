@@ -29,7 +29,7 @@ export default function AboutPage() {
               width={editorialImages.aboutFamily.width}
               height={editorialImages.aboutFamily.height}
               sizes={editorialImages.aboutFamily.sizes}
-              className="aspect-[6/7]"
+              className="aspect-[729/730]"
             />
             <div className="rounded-[1.75rem] bg-[linear-gradient(180deg,rgba(23,50,93,0.95),rgba(14,34,67,0.86))] p-6 text-white">
               <div className="rounded-[1.5rem] border border-white/16 bg-white/8 p-5">
